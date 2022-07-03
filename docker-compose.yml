@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres
+    container_name: parkingcontrol
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=parkingcontrol
+    volumes:
+      - pgdata:/data/postgres
+  
+volumes:
+  pgdata:
+    driver: local
