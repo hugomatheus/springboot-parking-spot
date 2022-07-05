@@ -15,7 +15,7 @@ public class ParkingControlApplication {
 	
 	@GetMapping("/")
 	public String index() {
-		return "api";
+		return "API - PARKING SPOT";
 	}
 
 }
