@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.parkingcontrol.dtos.ParkingSpotDto;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.services.ParkingSpotService;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -31,8 +32,8 @@ public class ParkingSpotController {
 	}
 	
 	@GetMapping
-	public String index() {
-		return "parking-spot";
+	public ResponseEntity<List<ParkingSpotModel>> getAllParkingSpots() {
+		return ResponseEntity.status(HttpStatus.OK).body(parkingSpotService.findAll());
 	}
 	
 	@PostMapping
