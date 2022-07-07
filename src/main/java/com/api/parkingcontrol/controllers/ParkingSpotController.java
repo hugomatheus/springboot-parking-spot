@@ -54,7 +54,7 @@ public class ParkingSpotController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> saveParkingSpoty(@RequestBody @Valid ParkingSpotDto parkingSpotDto) {
+	public ResponseEntity<Object> saveParkingSpot(@RequestBody @Valid ParkingSpotDto parkingSpotDto) {
 		
 		if(parkingSpotService.existsByLicensePlateCar(parkingSpotDto.getLicensePlateCar())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: License plate car is already in use!");
