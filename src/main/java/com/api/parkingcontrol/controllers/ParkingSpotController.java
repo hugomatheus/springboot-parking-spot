@@ -8,13 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.api.parkingcontrol.dtos.ParkingSpotDto;
 import com.api.parkingcontrol.models.ParkingSpotModel;
@@ -48,6 +42,16 @@ public class ParkingSpotController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(parkingSpot.get());
 	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> deleteParkingSpot(@PathVariable(value = "id") UUID id) {
+		Optional<ParkingSpotModel> parkingSpot = parkingSpotService.findById(id);
+		if(!parkingSpot.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking spot not found");
+		}
+		parkingSpotService.delete(parkingSpot.get());
+		return ResponseEntity.status(HttpStatus.OK).body("Parking spot deleted successfully");
+	}
 	
 	@PostMapping
 	public ResponseEntity<Object> saveParkingSpoty(@RequestBody @Valid ParkingSpotDto parkingSpotDto) {
@@ -64,10 +68,10 @@ public class ParkingSpotController {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Parking spot already registered for this apartment/block!");
 		}
 		
-		var parkingSpotyModel = new ParkingSpotModel();
-		BeanUtils.copyProperties(parkingSpotDto, parkingSpotyModel);
-		parkingSpotyModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-		return ResponseEntity.status(HttpStatus.CREATED).body(parkingSpotService.save(parkingSpotyModel));
+		var parkingSpotModel = new ParkingSpotModel();
+		BeanUtils.copyProperties(parkingSpotDto, parkingSpotModel);
+		parkingSpotModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+		return ResponseEntity.status(HttpStatus.CREATED).body(parkingSpotService.save(parkingSpotModel));
 	}
 
 }
